@@ -1,9 +1,9 @@
 CFLAGS += -Wall -Wpedantic
 
-all: every
+all: every init
 
-stripped: every
-	strip -s every
+stripped: every init
+	strip -s every init
 
 clean:
 	rm -f *.o
