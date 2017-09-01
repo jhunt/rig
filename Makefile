@@ -1,4 +1,4 @@
-CFLAGS += -Wall -Wpedantic
+CFLAGS := -Wall -Wpedantic
 
 BINS :=
 BINS += always
