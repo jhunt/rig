@@ -13,3 +13,5 @@ stripped: $(BINS)
 clean:
 	rm -f *.o
 	rm -f $(BINS)
+
+init: init.o rig.o

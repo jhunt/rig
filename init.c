@@ -23,9 +23,13 @@
 
    init - An initial process for bootstrapping a running system
 
-   USAGE: init
+   USAGE: init [/etc/inittab]
+          init -v
 
  */
+
+#include "rig.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -187,13 +191,8 @@ void reaper(int sig, siginfo_t *info, void *_)
 }
 
 #define PROGRAM "init"
-#define VERSION "1.0"
 
 #define INITTAB "/etc/inittab"
-
-#define EXIT_OK       0
-#define EXIT_IMPROPER 1
-#define EXIT_RUNTIME  2
 
 int main(int argc, char **argv)
 {
@@ -205,10 +204,7 @@ int main(int argc, char **argv)
 		CONFIG = configure(INITTAB);
 
 	} else if (argc == 2) {
-		if (strcmp(argv[1], "-v") == 0 || strcmp(argv[1], "version") == 0) {
-			printf(PROGRAM " v" VERSION ", Copyright (c) 2017 James Hunt\n");
-			exit(EXIT_OK);
-		}
+		if (eq(argv[1], "-v")) show_version(PROGRAM);
 		CONFIG = configure(argv[1]);
 
 	} else {
