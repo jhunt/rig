@@ -3,6 +3,7 @@ CFLAGS += -Wall -Wpedantic
 BINS :=
 BINS += every
 BINS += init
+BINS += log
 BINS += svcs
 
 all: $(BINS)
