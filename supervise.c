@@ -21,10 +21,10 @@
 
    ---
 
-   svcs - Supervise services in a directory, with resurrection, log file
-          management and more.
+   supervise - Supervise services in a directory, with resurrection, log file
+               management and more.
 
-   USAGE: svcs /path/to/services [/another/path ...]
+   USAGE: supervise /path/to/services [/another/path ...]
 
  */
 
@@ -38,7 +38,7 @@
 #include <unistd.h>
 #include <dirent.h>
 
-#define PROGRAM "svcs"
+#define PROGRAM "supervise"
 #define EXIT_IMPROPER 1
 #define EXIT_RUNTIME 2
 #define EXIT_IN_CHILD 251
@@ -178,7 +178,7 @@ int main(int argc, char **argv)
 	int i, rc;
 
 	if (argc < 2) {
-		fprintf(stderr, "USAGE: svcs /path/to/service [/another/path ...]\n");
+		fprintf(stderr, "USAGE: " PROGRAM " /path/to/service [/another/path ...]\n");
 		exit(EXIT_IMPROPER);
 	}
 

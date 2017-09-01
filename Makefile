@@ -4,7 +4,7 @@ BINS :=
 BINS += every
 BINS += init
 BINS += logto
-BINS += svcs
+BINS += supervise
 
 all: $(BINS)
 stripped: $(BINS)
