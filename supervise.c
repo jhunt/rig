@@ -173,40 +173,39 @@ reapall(void)
 	}
 }
 
+static void
+usage(int rc)
+{
+	fprintf(stderr, "USAGE: " PROGRAM " /path/to/services\n");
+	exit(EXIT_IMPROPER);
+}
+
 int main(int argc, char **argv)
 {
-	int i, rc;
+	int rc;
 
-	if (argc < 2) {
-		fprintf(stderr, "USAGE: " PROGRAM " /path/to/service [/another/path ...]\n");
-		exit(EXIT_IMPROPER);
-	}
+	if (argc != 2) usage(EXIT_IMPROPER);
 	if (argv[1][0] == '-') {
 		if (eq(argv[1], "-v")) show_version(PROGRAM);
-		fprintf(stderr, "USAGE: " PROGRAM " /path/to/service [/another/path ...]\n");
-		exit(EXIT_IMPROPER);
+		if (eq(argv[1], "-h")) usage(EXIT_OK);
+		usage(EXIT_IMPROPER);
 	}
 
 	/* check for absolute paths */
-	for (i = 1; i < argc; i++) {
-		if (argv[i][0] != '/') {
-			fprintf(stderr, PROGRAM ": %s is not an absolute path\n", argv[i]);
-			exit(EXIT_IMPROPER);
-		}
+	if (argv[1][0] != '/') {
+		fprintf(stderr, PROGRAM ": %s is not an absolute path\n", argv[1]);
+		exit(EXIT_IMPROPER);
+	}
+
+	rc = chdir(argv[1]);
+	if (rc != 0) {
+		fprintf(stderr, PROGRAM ": failed to chdir to %s: %s (error %d)\n", argv[1], strerror(errno), errno);
+		exit(EXIT_RUNTIME);
 	}
 
 	for (;;) {
-		for (i = 1; i < argc; i++) {
-			rc = chdir(argv[i]);
-			if (rc != 0) {
-				fprintf(stderr, PROGRAM ": failed to chdir to %s: %s (error %d)\n", argv[i], strerror(errno), errno);
-				exit(EXIT_RUNTIME);
-			}
-
-			reapall();
-			runall();
-		}
-
+		reapall();
+		runall();
 		sleep(2);
 	}
 
