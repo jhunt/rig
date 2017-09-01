@@ -41,11 +41,15 @@
 #define EXIT_IMPROPER 1
 #define EXIT_IN_CHILD 251
 
+#define TOOFAST 2
+#define RESPAWN 5
+
 int main(int argc, char **argv)
 {
 	pid_t pid, kid;
 	int rc;
 	FILE *debug;
+	struct timespec now, last;
 
 	if (argc < 2) {
 		fprintf(stderr, "USAGE: init path/to/command args...\n");
@@ -59,12 +63,16 @@ int main(int argc, char **argv)
 	}
 
 	freopen("/dev/null", "r", stdin);
-rexec:
+	memset(&last, 0, sizeof(last));
+
+reexec:
+	clock_gettime(CLOCK_MONOTONIC, &last);
+
 	pid = fork();
 	if (pid < 0) {
 		fprintf(stderr, PROGRAM ": fork() failed: %s (error %d)\n", strerror(errno), errno);
 		sleep(5);
-		goto rexec;
+		goto reexec;
 	}
 	if (pid == 0) {
 		execvp(argv[1], &argv[1]);
@@ -91,8 +99,19 @@ rexec:
 				fprintf(stderr, PROGRAM ": supervised child process %d died with unrecognized status of %d (%08x)\n", kid, rc, rc);
 			}
 
-			sleep(5);
-			goto rexec;
+			rc = clock_gettime(CLOCK_MONOTONIC, &now);
+			if (rc < 0) {
+				fprintf(stderr, PROGRAM ": failed to get current time: %s (error %d)\n", strerror(errno), errno);
+				fprintf(stderr, PROGRAM ": waiting %d seconds to respawn...\n", RESPAWN);
+				sleep(RESPAWN);
+				goto reexec;
+			}
+
+			if (now.tv_sec < last.tv_sec + TOOFAST) {
+				fprintf(stderr, PROGRAM ": supervised child process died too quickly; waiting %d seconds to respawn...\n", RESPAWN);
+				sleep(RESPAWN);
+			}
+			goto reexec;
 		}
 
 		if (WIFEXITED(rc)) {
