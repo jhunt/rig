@@ -1,12 +1,14 @@
 CFLAGS += -Wall -Wpedantic
 
-all: every init
+BINS :=
+BINS += every
+BINS += init
+BINS += svcs
 
-stripped: every init
-	strip -s every init
+all: $(BINS)
+stripped: $(BINS)
+	strip -s $(BINS)
 
 clean:
 	rm -f *.o
-	rm -f every
-
-every: every.o
+	rm -f $(BINS)
