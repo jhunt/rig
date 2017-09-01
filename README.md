@@ -10,8 +10,8 @@ utilities
   it if/when it exits.
 - **supervise** - Runs all the executable scripts in a single
   directory, if they aren't already running.
-- **init** - Waits for inherited child processes; starts one or
-  more `supervise` sub-processes.
+- **init** - Waits for inherited child processes; starts processes
+  from a flat file (/etc/inittab).
 - **logto** - Timestamps log streams and writes them to disk.
   Handles log file rotation based on file size.
 - **runas** - Exec another program as a different UID + GID.
