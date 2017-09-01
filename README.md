@@ -18,6 +18,26 @@ utilities
 - **locked** - Exec another program once a lock is held.
 - **every** - Exec another program on a given periodic schedule.
 
+building
+--------
+
+To build the utilities:
+
+    make all
+
+To build a single utility:
+
+    make every
+    make init
+    # etc.
+
+To strip the binaries:
+
+    make stripped
+
+Build scripts should honor CFLAGS for whatever optimizations you
+want to throw at it.
+
 contributing
 ------------
 
