@@ -21,9 +21,9 @@
 
    ---
 
-   log - Timestamp lines read from standard input, and write them to disk
+   logto - Timestamp lines read from standard input, and write them to disk
 
-   USAGE: ./some/program | log /the/log/file
+   USAGE: ./some/program | logto /the/log/file
 
  */
 
