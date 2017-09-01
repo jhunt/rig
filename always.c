@@ -71,7 +71,10 @@ int main(int argc, char **argv)
 		debug = fopen("/dev/null", "w");
 	}
 
-	freopen("/dev/null", "r", stdin);
+	if (!freopen("/dev/null", "r", stdin)) {
+		fprintf(stderr, PROGRAM ": failed to redirect /dev/null into stdin\n");
+		fclose(stdin);
+	}
 	memset(&last, 0, sizeof(last));
 
 reexec:

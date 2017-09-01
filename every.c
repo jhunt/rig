@@ -101,7 +101,10 @@ int main(int argc, char **argv)
 		}
 	}
 
-	freopen("/dev/null", "r", stdin);
+	if (!freopen("/dev/null", "r", stdin)) {
+		fprintf(stderr, PROGRAM ": failed to redirect /dev/null into stdin\n");
+		fclose(stdin);
+	}
 	for (;;) {
 		use_clock = 1;
 		rc = clock_gettime(CLOCK_MONOTONIC, &end);

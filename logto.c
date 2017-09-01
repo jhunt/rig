@@ -41,6 +41,20 @@
 
 #define MAX_LINE 8192
 
+static void
+writeall(int fd, const void *buf, size_t count)
+{
+	ssize_t n;
+	size_t off;
+
+	off = 0;
+again:
+	n = write(fd, (const char *)buf + off, count - off);
+	if (n <= 0) return;
+	off += n;
+	goto again;
+}
+
 int main(int argc, char **argv)
 {
 	int rc, mid;
@@ -106,8 +120,8 @@ int main(int argc, char **argv)
 				break;
 			}
 
-			if (!mid) write(1, ts, 16);
-			write(1, a, b - a + 1);
+			if (!mid) writeall(1, ts, 16);
+			writeall(1, a, b - a + 1);
 			a = b + 1; mid = 0;
 		}
 	}

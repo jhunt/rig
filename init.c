@@ -41,6 +41,8 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
+#define PROGRAM "init"
+
 /*
    `struct child` contains all of the details for each of the
    child processes that we are supervising.  Partially, this
@@ -159,9 +161,18 @@ void spin(struct child *config)
 		char *envp[1] = { NULL };
 		argv[0] = strrchr(config->command, '/') + 1;
 
-		freopen("/dev/null", "r", stdin);
-		freopen("/dev/null", "w", stdout);
-		freopen("/dev/null", "w", stderr);
+		if (!freopen("/dev/null", "r", stdin)) {
+			fprintf(stderr, PROGRAM ": failed to redirect /dev/null into stdin\n");
+			fclose(stdin);
+		}
+		if (!freopen("/dev/null", "w", stdout)) {
+			fprintf(stderr, PROGRAM ": failed to redirect stdout to /dev/null\n");
+			fclose(stdout);
+		}
+		if (!freopen("/dev/null", "w", stderr)) {
+			fprintf(stderr, PROGRAM ": failed to redirect stderr to /dev/null\n");
+			fclose(stderr);
+		}
 
 		execve(config->command, argv, envp);
 		/* uh-oh, exec failed (bad binary? non-executable?

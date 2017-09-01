@@ -141,7 +141,9 @@ runall(void)
 	d = opendir(".");
 	if (!d) {
 		*path = '\0';
-		getcwd(path, MAX_FILENAME);
+		if (getcwd(path, MAX_FILENAME) != 0) {
+			strcpy(path, "current working directory");
+		}
 		fprintf(stderr, PROGRAM ": failed to read %s: %s (error %d)\n", path, strerror(errno), errno);
 		exit(EXIT_RUNTIME);
 	}

@@ -1,8 +1,7 @@
 #ifndef RIG_H
 #define RIG_H
 
-/* needed for realtime extensions */
-#define _POSIX_C_SOURCE 199309L
+#define _POSIX_C_SOURCE 200809L
 
 #define VERSION "1.0"
 
