@@ -25,8 +25,11 @@
                management and more.
 
    USAGE: supervise /path/to/services [/another/path ...]
+          supervise -v
 
  */
+
+#include "rig.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -39,9 +42,6 @@
 #include <dirent.h>
 
 #define PROGRAM "supervise"
-#define EXIT_IMPROPER 1
-#define EXIT_RUNTIME 2
-#define EXIT_IN_CHILD 251
 
 #define MAX_SERVICES 5000
 #define MAX_FILENAME 8192
@@ -178,6 +178,11 @@ int main(int argc, char **argv)
 	int i, rc;
 
 	if (argc < 2) {
+		fprintf(stderr, "USAGE: " PROGRAM " /path/to/service [/another/path ...]\n");
+		exit(EXIT_IMPROPER);
+	}
+	if (argv[1][0] == '-') {
+		if (eq(argv[1], "-v")) show_version(PROGRAM);
 		fprintf(stderr, "USAGE: " PROGRAM " /path/to/service [/another/path ...]\n");
 		exit(EXIT_IMPROPER);
 	}

@@ -24,8 +24,11 @@
    logto - Timestamp lines read from standard input, and write them to disk
 
    USAGE: ./some/program | logto /the/log/file
+          logto -v
 
  */
+
+#include "rig.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -34,8 +37,8 @@
 #include <string.h>
 #include <sys/time.h>
 
-#define EXIT_IMPROPER 1
-#define EXIT_RUNTIME 2
+#define PROGRAM "logto"
+
 #define MAX_LINE 8192
 
 int main(int argc, char **argv)
@@ -46,6 +49,12 @@ int main(int argc, char **argv)
 	ssize_t nread;
 
 	if (argc != 2) {
+		fprintf(stderr, "USAGE: log /path/to/log/file\n");
+		exit(EXIT_IMPROPER);
+	}
+
+	if (argv[1][0] == '-') {
+		if (eq(argv[1], "-v")) show_version(PROGRAM);
 		fprintf(stderr, "USAGE: log /path/to/log/file\n");
 		exit(EXIT_IMPROPER);
 	}

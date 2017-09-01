@@ -24,6 +24,7 @@
    every - Run a command on a periodic schedule
 
    USAGE: every N path/to/command args...
+          every -v
 
    N must be in seconds, without a unit.  Only values between 1 and 86400
    (1 day) are allowed.  Values outside of that range will cause `every'
@@ -31,8 +32,7 @@
 
  */
 
-/* needed for realtime extensions */
-#define _POSIX_C_SOURCE 199309L
+#include "rig.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -45,9 +45,6 @@
 #include <sys/wait.h>
 
 #define PROGRAM "every"
-#define EXIT_IMPROPER 1
-#define EXIT_RUNTIME  2
-#define EXIT_IN_CHILD 251
 
 static void
 oops_improper(const char *v)
@@ -72,6 +69,11 @@ int main(int argc, char **argv)
 	struct timespec start, end, nap;
 	FILE *debug;
 
+	if (argc > 1 && argv[1][0] == '-') {
+		if (eq(argv[1], "-v")) show_version(PROGRAM);
+		fprintf(stderr, "USAGE: every N path/to/command args...\n");
+		exit(EXIT_IMPROPER);
+	}
 	if (argc < 3) {
 		fprintf(stderr, "USAGE: every N path/to/command args...\n"
 		                "\n"
@@ -88,7 +90,6 @@ int main(int argc, char **argv)
 
 	n = 0;
 	p = argv[1];
-	if (*p == '-') oops_improper(argv[1]);
 	if (*p == '+') p++;
 	for (; *p; p++) {
 		if (*p >= '0' && *p <= '9') {
