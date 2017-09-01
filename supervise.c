@@ -122,7 +122,7 @@ runone(const char *bin)
 			return;
 		}
 		if (pid == 0) {
-			argv[0] = "init";
+			argv[0] = "always";
 			argv[1] = path;
 			argv[2] = NULL;
 			execvp(argv[0], argv);
