@@ -4,6 +4,7 @@ BINS :=
 BINS += always
 BINS += every
 BINS += init
+BINS += locked
 BINS += logto
 BINS += runas
 BINS += supervise
@@ -19,6 +20,7 @@ clean:
 always: always.o rig.o
 every: every.o rig.o
 init: init.o rig.o
+locked: locked.o rig.o
 logto: logto.o rig.o
 runas: runas.o rig.o
 supervise: supervise.o rig.o

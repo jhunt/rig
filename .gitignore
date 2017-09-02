@@ -1,6 +1,7 @@
 /always
 /every
 /init
+/locked
 /logto
 /runas
 /supervise
