@@ -5,6 +5,7 @@ BINS += always
 BINS += every
 BINS += init
 BINS += logto
+BINS += runas
 BINS += supervise
 
 all: $(BINS)
@@ -19,4 +20,5 @@ always: always.o rig.o
 every: every.o rig.o
 init: init.o rig.o
 logto: logto.o rig.o
+runas: runas.o rig.o
 supervise: supervise.o rig.o
